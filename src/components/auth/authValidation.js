@@ -5,6 +5,7 @@ const Joi = require('joi');
 const registerSchema = Joi.object({
     email: Joi.string()
         .required()
+        .lowercase()
         .email({
             minDomainSegments: 2
         }),
@@ -32,8 +33,8 @@ const forgotPassword = Joi.object({
 
 const validate = async (payload, schema, next) => {
     try {
-        await schema.validateAsync(payload);
-        return next();
+        const value = await schema.validateAsync(payload);
+        return next(null, value);
     } catch (err) {
         return next(err);
     }

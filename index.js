@@ -1,8 +1,11 @@
 'use strict';
 const app = require('./src/app');
 
-const port = process.env.PORT || 3000;
+const startServer = async () => {
+    const port = process.env.PORT || 3000;
+    app.listen(port, () => {
+        console.log(`server is running on port ${port}`);
+    });
+};
 
-app.listen(port, () => {
-    console.log(`server is running on port ${port}`);
-});
+startServer();
