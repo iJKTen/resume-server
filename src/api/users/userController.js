@@ -1,7 +1,5 @@
 'use strict';
 
-const user = require('./user');
-
 module.exports = {
     get: async (req, res, next) => {
 

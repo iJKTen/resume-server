@@ -36,7 +36,7 @@ module.exports = {
             client.close();
         }
     },
-    get: async (id) => {
+    get: async (email) => {
 
     },
     update: async () => {

@@ -2,7 +2,7 @@
 'use strict';
 
 const router = require('express').Router();
-const { authController, authValidation } = require('../components/auth');
+const { authController, authValidation } = require('../api/auth');
 
 router
     .post('/auth/login', authValidation.validateLoginSchema, authController.login)
