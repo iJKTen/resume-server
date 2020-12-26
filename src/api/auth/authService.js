@@ -23,18 +23,17 @@ const userService = (userModel) => {
             };
         },
         login: async (login) => {
-            const user = await userModel.get(login.email);
+            const user = await userModel.getByEmail(login.email);
             if (!user) {
                 return new Error('User not found!');
             }
 
             if (bcrypt.compare(user.password, login.password)) {
                 const accessToken = jwt.sign(
-                    {
-                        id: user.id
-                    },
+                    { id: user._id.toString() },
                     config.jwt.JSON_WEB_TOKEN_SECRET,
-                    { expiresIn: config.jwt.JSON_WEB_TOKEN_EXPIRATION });
+                    { expiresIn: config.jwt.JSON_WEB_TOKEN_EXPIRATION }
+                );
 
                 return {
                     id: user.id,

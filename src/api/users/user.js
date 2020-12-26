@@ -1,5 +1,7 @@
+/* eslint-disable new-cap */
 'use strict';
 
+const { ObjectId } = require('mongodb');
 const { dbClient } = require('../../config/');
 
 const userCollection = 'users';
@@ -19,7 +21,7 @@ module.exports = {
             client.close();
         }
     },
-    get: async (email) => {
+    getByEmail: async (email) => {
         const client = dbClient();
         try {
             await client.connect();
@@ -29,13 +31,20 @@ module.exports = {
             client.close();
         }
     },
+    getById: async (id) => {
+        const client = dbClient();
+        try {
+            await client.connect();
+            const collection = client.db().collection(userCollection);
+            return await collection.findOne({ _id: ObjectId(id) });
+        } catch (err) {
+            client.close();
+        }
+    },
     update: async () => {
 
     },
     delete: async () => {
-
-    },
-    changePassword: async () => {
 
     }
 };

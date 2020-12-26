@@ -1,6 +1,8 @@
 'use strict';
 
 const Joi = require('joi');
+const jwt = require('jsonwebtoken');
+const { config } = require('../../config');
 
 const registerSchema = Joi.object({
     email: Joi.string()
@@ -49,5 +51,16 @@ module.exports = {
     },
     forgotPassword: async (req, res, next) => {
         return await validate(req.body, forgotPassword, next);
+    },
+    verifyToken: async (req, res, next) => {
+        const token = req.headers['x-access-token'];
+        if (!token) {
+            const err = new Error('Token not found!');
+            err.statusCode = 403;
+            return next(err);
+        }
+        const decodedToken = jwt.verify(token, config.jwt.JSON_WEB_TOKEN_SECRET);
+        req.userId = decodedToken.id;
+        next();
     }
 };
