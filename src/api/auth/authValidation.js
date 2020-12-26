@@ -62,5 +62,14 @@ module.exports = {
         const decodedToken = jwt.verify(token, config.jwt.JSON_WEB_TOKEN_SECRET);
         req.userId = decodedToken.id;
         next();
+    },
+    isCurrentUser: async (req, res, next) => {
+        const id = req.params.id;
+        if (id != req.userId) {
+            const err = new Error('User not authorized');
+            err.statusCode = 401;
+            return next(err);
+        }
+        next();
     }
 };
