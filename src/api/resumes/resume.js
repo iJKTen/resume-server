@@ -10,10 +10,13 @@ module.exports = {
     index: async (userId) => {
         const client = dbClient();
         try {
+            const query = {
+                userId: ObjectId(userId)
+            };
             await client.connect();
             const collection = client.db().collection(resumeCollection);
-            const result = await collection.find({ userId });
-            return result.ops;
+            const result = await collection.find(query).toArray();
+            return result;
         } finally {
             client.close();
         }
@@ -22,7 +25,7 @@ module.exports = {
         const client = dbClient();
         try {
             const filter = {
-                userId
+                'userId': ObjectId(userId)
             };
             const options = {
                 upsert: true
