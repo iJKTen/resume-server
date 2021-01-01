@@ -3,7 +3,8 @@
 const resumeService = (resumeModel) => {
     return {
         index: async (userId) => {
-            return await resumeModel.index(userId);
+            const result = await resumeModel.index(userId);
+            return result[0].resumes;
         },
         create: async (userId, resume) => {
             return await resumeModel.create(userId, resume);

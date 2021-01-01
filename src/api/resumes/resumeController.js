@@ -63,13 +63,13 @@ module.exports = {
             const userId = req.userId;
             const resumeId = req.params.resumeId;
             const deletedCount = await resumeService.delete(userId, resumeId);
-            if (deletedCount === 1) {
-                return res.sendStatus(204);
+            if (deletedCount !== 1) {
+                const err = new Error('Resume not found!');
+                err.statusCode = 404;
+                return next(err);
             }
 
-            const err = new Error('Resume not found!');
-            err.statusCode = 404;
-            next(err);
+            return res.sendStatus(204);
         } catch (err) {
             return next(err);
         }
