@@ -14,7 +14,7 @@ const userService = (userModel) => {
         register: async (registration) => {
             const registrationUser = {
                 email: registration.email,
-                password: encrypt(registration.password)
+                password: await encrypt(registration.password)
             };
             const user = await userModel.create(registrationUser);
             return {

@@ -59,9 +59,15 @@ module.exports = {
             err.statusCode = 403;
             return next(err);
         }
-        const decodedToken = jwt.verify(token, config.jwt.JSON_WEB_TOKEN_SECRET);
-        req.userId = decodedToken.id;
-        next();
+
+        try {
+            const decodedToken = jwt.verify(token, config.jwt.JSON_WEB_TOKEN_SECRET);
+            req.userId = decodedToken.id;
+            next();
+        } catch (err) {
+            err.statusCode = 401;
+            return next(err);
+        }
     },
     isCurrentUser: async (req, res, next) => {
         const id = req.params.id;

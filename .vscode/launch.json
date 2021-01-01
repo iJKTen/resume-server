@@ -14,7 +14,8 @@
             "program": "${workspaceFolder}/index.js",
             "runtimeArgs": [
                 "--trace-deprecation",
-                "--inspect"
+                "--inspect",
+                "--unhandled-rejections=strict"
             ],
             "restart": true,
             "runtimeExecutable": "${workspaceFolder}/node_modules/nodemon/bin/nodemon.js",
