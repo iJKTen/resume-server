@@ -9,15 +9,20 @@ const resumeService = (resumeModel) => {
             return await resumeModel.create(userId, resume);
         },
         get: async (userId, resumeId) => {
-            const resumes = await resumeModel.get(userId, resumeId);
-            if (resumes.length > 0) {
-                return resumes[0].resume[0];
+            const result = await resumeModel.get(userId, resumeId);
+            if (result.length > 0) {
+                return result[0].resumes[0];
             }
 
             return null;
         },
         update: async (userId, resumeId, resume) => {
-            return await resumeModel.update(userId, resumeId, resume);
+            const result = await resumeModel.update(userId, resumeId, resume);
+            if (result.matchedCount === 1) {
+                return result.modifiedCount;
+            }
+
+            return -1;
         },
         delete: async (userId, resumeId) => {
             return await resumeModel.delete(userId, resumeId);

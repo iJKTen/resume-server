@@ -6,6 +6,11 @@ const { dbClient } = require('../../config/');
 
 const resumeCollection = 'resumes';
 
+const resumeQuery = (userId, resumeId) => ({
+    'userId': ObjectId(userId),
+    'resumes._id': ObjectId(resumeId)
+});
+
 module.exports = {
     index: async (userId) => {
         const client = dbClient();
@@ -32,7 +37,7 @@ module.exports = {
             };
             const resumeDoc = {
                 $addToSet: {
-                    'resume': {
+                    'resumes': {
                         _id: new ObjectId(),
                         ...resume
                     }
@@ -48,10 +53,7 @@ module.exports = {
     get: async (userId, resumeId) => {
         const client = dbClient();
         try {
-            const query = {
-                'userId': ObjectId(userId),
-                'resume._id': ObjectId(resumeId)
-            };
+            const query = resumeQuery(userId, resumeId);
             await client.connect();
             const collection = client.db().collection(resumeCollection);
             const result = await collection.find(query).toArray();
@@ -63,13 +65,18 @@ module.exports = {
     update: async (userId, resumeId, resume) => {
         const client = dbClient();
         try {
-            const query = {
-                'userId': ObjectId(userId),
-                'resume._id': ObjectId(resumeId)
+            const query = resumeQuery(userId, resumeId);
+            const resumeDoc = {
+                $set: {
+                    'resumes.$': {
+                        _id: ObjectId(resumeId),
+                        ...resume
+                    }
+                }
             };
             await client.connect();
             const collection = client.db().collection(resumeCollection);
-            const result = await collection.replaceOne(query, resume).toArray();
+            const result = await collection.updateOne(query, resumeDoc);
             return result;
         } finally {
             client.close();
@@ -78,14 +85,11 @@ module.exports = {
     delete: async (userId, resumeId) => {
         const client = dbClient();
         try {
-            const query = {
-                'userId': ObjectId(userId),
-                'resume._id': ObjectId(resumeId)
-            };
+            const query = resumeQuery(userId, resumeId);
             await client.connect();
             const collection = client.db().collection(resumeCollection);
             const result = await collection.deleteOne(query);
-            return result.ops;
+            return result.deletedCount;
         } finally {
             client.close();
         }
