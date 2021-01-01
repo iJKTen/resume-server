@@ -12,7 +12,10 @@ router
     .post('/auth/register', authValidation.validateRegisterSchema, authController.register)
 
     .get('/:id/resumes', [authValidation.verifyToken], resumeController.index)
-    .get('/:id/resumes/:resumeId', resumeController.get)
+    .get('/:id/resumes/:resumeId', [
+        authValidation.verifyToken,
+        authValidation.isCurrentUser
+    ], resumeController.get)
     .post('/:id/resumes', [
         authValidation.verifyToken,
         authValidation.isCurrentUser,

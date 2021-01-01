@@ -49,15 +49,13 @@ module.exports = {
         const client = dbClient();
         try {
             const query = {
-                userId,
-                resumes: {
-                    resumeId
-                }
+                'userId': ObjectId(userId),
+                'resume._id': ObjectId(resumeId)
             };
             await client.connect();
             const collection = client.db().collection(resumeCollection);
-            const result = await collection.find(query);
-            return result.ops[0];
+            const result = await collection.find(query).toArray();
+            return result;
         } finally {
             client.close();
         }
@@ -66,15 +64,13 @@ module.exports = {
         const client = dbClient();
         try {
             const query = {
-                userId,
-                resumes: {
-                    resumeId
-                }
+                'userId': ObjectId(userId),
+                'resume._id': ObjectId(resumeId)
             };
             await client.connect();
             const collection = client.db().collection(resumeCollection);
-            const result = await collection.replaceOne(query, resume);
-            return result.ops[0];
+            const result = await collection.replaceOne(query, resume).toArray();
+            return result;
         } finally {
             client.close();
         }
@@ -83,10 +79,8 @@ module.exports = {
         const client = dbClient();
         try {
             const query = {
-                userId,
-                resumes: {
-                    resumeId
-                }
+                'userId': ObjectId(userId),
+                'resume._id': ObjectId(resumeId)
             };
             await client.connect();
             const collection = client.db().collection(resumeCollection);
