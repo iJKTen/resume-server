@@ -50,10 +50,12 @@ module.exports = {
             client.close();
         }
     },
-    get: async (userId, resumeId) => {
+    get: async (resumeId) => {
         const client = dbClient();
         try {
-            const query = resumeQuery(userId, resumeId);
+            const query = {
+                'resumes._id': ObjectId(resumeId)
+            };
             await client.connect();
             const collection = client.db().collection(resumeCollection);
             const result = await collection.find(query).toArray();

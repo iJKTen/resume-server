@@ -11,25 +11,16 @@ router
     .post('/auth/forgotpassword', authValidation.forgotPassword, authController.forgotPassword)
     .post('/auth/register', authValidation.validateRegisterSchema, authController.register)
 
-    .get('/:id/resumes', [authValidation.verifyToken], resumeController.index)
-    .get('/:id/resumes/:resumeId', [
+    .get('/resumes', [authValidation.verifyToken], resumeController.index)
+    .get('/resumes/:resumeId', resumeController.get)
+    .post('/resumes', [
         authValidation.verifyToken,
-        authValidation.isCurrentUser
-    ], resumeController.get)
-    .post('/:id/resumes', [
-        authValidation.verifyToken,
-        authValidation.isCurrentUser,
         resumeValidation.validateResume
     ], resumeController.create)
-    .put('/:id/resumes/:resumeId', [
+    .put('/resumes/:resumeId', [
         authValidation.verifyToken,
-        authValidation.isCurrentUser,
         resumeValidation.validateResume
     ], resumeController.update)
-    .delete('/:id/resumes/:resumeId', [
-        authValidation.verifyToken,
-        authValidation.isCurrentUser
-    ], resumeController.delete);
-
+    .delete('/resumes/:resumeId', [authValidation.verifyToken], resumeController.delete);
 
 module.exports = router;

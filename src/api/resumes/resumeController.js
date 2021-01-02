@@ -17,9 +17,8 @@ module.exports = {
     },
     get: async (req, res, next) => {
         try {
-            const userId = req.userId;
             const resumeId = req.params.resumeId;
-            const resume = await resumeService.get(userId, resumeId);
+            const resume = await resumeService.get(resumeId);
             if (resume === null) {
                 const err = new Error('Resume not found!');
                 err.statusCode = 404;

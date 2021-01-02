@@ -9,8 +9,8 @@ const resumeService = (resumeModel) => {
         create: async (userId, resume) => {
             return await resumeModel.create(userId, resume);
         },
-        get: async (userId, resumeId) => {
-            const result = await resumeModel.get(userId, resumeId);
+        get: async (resumeId) => {
+            const result = await resumeModel.get(resumeId);
             if (result.length > 0) {
                 return result[0].resumes[0];
             }
