@@ -3,13 +3,15 @@
 
 const router = require('express').Router();
 const { authController, authValidation } = require('../api/auth');
+const { userController, userValidation } = require('../api/users');
 const { resumeController, resumeValidation } = require('../api/resumes');
 
 router
     .post('/auth/login', authValidation.validateLoginSchema, authController.login)
     .post('/auth/logout', authController.logout)
     .post('/auth/forgotpassword', authValidation.forgotPassword, authController.forgotPassword)
-    .post('/auth/register', authValidation.validateRegisterSchema, authController.register)
+
+    .post('/users', userValidation.validateRegisterSchema, userController.create)
 
     .get('/resumes', [authValidation.verifyToken], resumeController.index)
     .get('/resumes/:resumeId', resumeController.get)

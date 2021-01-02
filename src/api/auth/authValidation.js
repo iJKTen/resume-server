@@ -4,18 +4,6 @@ const Joi = require('joi');
 const jwt = require('jsonwebtoken');
 const { config } = require('../../config');
 
-const registerSchema = Joi.object({
-    email: Joi.string()
-        .required()
-        .lowercase()
-        .email({
-            minDomainSegments: 2
-        }),
-    password: Joi.string()
-        .required(),
-    password_confirmation: Joi.ref('password')
-});
-
 const loginSchema = Joi.object({
     email: Joi.string()
         .required()
@@ -43,9 +31,6 @@ const validate = async (payload, schema, next) => {
 };
 
 module.exports = {
-    validateRegisterSchema: async (req, res, next) => {
-        return await validate(req.body, registerSchema, next);
-    },
     validateLoginSchema: async (req, res, next) => {
         return await validate(req.body, loginSchema, next);
     },
