@@ -33,7 +33,7 @@ module.exports = {
     create: async (req, res, next) => {
         try {
             const userId = req.userId;
-            const resumeJson = req.body;
+            const resumeJson = req.validatedBody;
             await resumeService.create(userId, resumeJson);
             return res.sendStatus(201);
         } catch (err) {
@@ -44,7 +44,7 @@ module.exports = {
         try {
             const userId = req.userId;
             const resumeId = req.params.resumeId;
-            const resumeJson = req.body;
+            const resumeJson = req.validatedBody;
             const result = await resumeService.update(userId, resumeId, resumeJson);
             if (result === -1) {
                 const err = new Error('Resume not found');

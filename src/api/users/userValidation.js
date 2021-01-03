@@ -20,7 +20,8 @@ module.exports = {
     validateRegisterSchema: async (req, res, next) => {
         try {
             const value = await registerSchema.validateAsync(req.body);
-            return next(null, value);
+            req.validatedBody = value;
+            return next();
         } catch (err) {
             return next(err);
         }

@@ -58,7 +58,7 @@ module.exports = {
             };
             await client.connect();
             const collection = client.db().collection(resumeCollection);
-            const result = await collection.find(query).toArray();
+            const result = await collection.findOne(query);
             return result;
         } finally {
             client.close();

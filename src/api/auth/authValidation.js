@@ -7,13 +7,14 @@ const { config } = require('../../config');
 const loginSchema = Joi.object({
     email: Joi.string()
         .required()
+        .lowercase()
         .email({
             minDomainSegments: 2
         }),
     password: Joi.string().required()
 });
 
-const forgotPassword = Joi.object({
+const forgotPasswordSchema = Joi.object({
     email: Joi.string()
         .required()
         .email({
@@ -21,21 +22,24 @@ const forgotPassword = Joi.object({
         })
 });
 
-const validate = async (payload, schema, next) => {
-    try {
-        const value = await schema.validateAsync(payload);
-        return next(null, value);
-    } catch (err) {
-        return next(err);
-    }
-};
-
 module.exports = {
     validateLoginSchema: async (req, res, next) => {
-        return await validate(req.body, loginSchema, next);
+        try {
+            const value = await loginSchema.validateAsync(req.body);
+            req.validatedBody = value;
+            next();
+        } catch (err) {
+            next(err);
+        }
     },
     forgotPassword: async (req, res, next) => {
-        return await validate(req.body, forgotPassword, next);
+        try {
+            const value = await forgotPasswordSchema.validateAsync(req.body);
+            req.validatedBody = value;
+            next();
+        } catch (err) {
+            next(err);
+        }
     },
     verifyToken: async (req, res, next) => {
         const token = req.headers['x-access-token'];
