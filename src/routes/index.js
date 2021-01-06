@@ -11,6 +11,7 @@ router
     .post('/auth/logout', authController.logout)
     .post('/auth/forgotpassword', authValidation.forgotPassword, authController.forgotPassword)
 
+    .get('/users/profile', userController.profile)
     .get('/users/:email', userController.get)
     .post('/users', userValidation.validateRegisterSchema, userController.create)
 
