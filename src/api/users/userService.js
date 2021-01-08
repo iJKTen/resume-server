@@ -29,7 +29,14 @@ const userService = (userModel) => {
                 email: user.email
             };
         },
-        get: async (email) => {
+        get: async (userId) => {
+            const user = await userModel.getById(userId);
+            if (user) {
+                return user;
+            }
+            return null;
+        },
+        getByEmail: async (email) => {
             const user = await userModel.getByEmail(email.toLowerCase());
             if (user) {
                 return {
