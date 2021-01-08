@@ -31,6 +31,16 @@ module.exports = {
             client.close();
         }
     },
+    getByUsername: async (username) => {
+        const client = dbClient();
+        try {
+            await client.connect();
+            const collection = client.db().collection(userCollection);
+            return await collection.findOne({ username });
+        } catch (err) {
+            client.close();
+        }
+    },
     getById: async (id) => {
         const client = dbClient();
         try {

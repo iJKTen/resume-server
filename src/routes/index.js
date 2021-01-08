@@ -13,6 +13,7 @@ router
 
     .get('/users/profile', [authValidation.verifyToken], userController.get)
     .get('/users/:email', userController.getByEmail)
+    .get('/users/:username', userController.getByUsername)
     .post('/users', userValidation.validateRegisterSchema, userController.create)
 
     .get('/resumes', [authValidation.verifyToken], resumeController.index)

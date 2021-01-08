@@ -6,6 +6,13 @@ const bcrypt = require('bcrypt');
 const userService = (userModel) => {
     return {
         create: async (registration) => {
+            const existingUsername = await userModel.getByUsername(registration.username);
+            if (existingUsername) {
+                const err = new Error('Username is taken');
+                err.statusCode = 409;
+                return err;
+            }
+
             const existingUser = await userModel.getByEmail(registration.email);
             if (existingUser) {
                 const err = new Error('Email address is taken');
@@ -19,6 +26,7 @@ const userService = (userModel) => {
             };
 
             const registrationUser = {
+                username: registration.username,
                 email: registration.email,
                 password: await encrypt(registration.password),
                 role: registration.role
@@ -38,6 +46,15 @@ const userService = (userModel) => {
         },
         getByEmail: async (email) => {
             const user = await userModel.getByEmail(email.toLowerCase());
+            if (user) {
+                return {
+                    'email': user.email
+                };
+            }
+            return null;
+        },
+        getByUsername: async (username) => {
+            const user = await userModel.getByUsername(username.toLowerCase());
             if (user) {
                 return {
                     'email': user.email
