@@ -27,7 +27,7 @@ const resumeSchema = Joi.object({
     summary: Joi.string()
         .required()
         .trim(),
-    whatDoYouDo: Joi.string()
+    headline: Joi.string()
         .required()
         .trim(),
     pronouns: Joi.string()
@@ -80,6 +80,9 @@ const resumeSchema = Joi.object({
         Joi.object({
             title: Joi.string(),
             description: Joi.string(),
+            employment_type: Joi.string()
+                .valid('Full-time', 'Part-time', 'Self-employed', 'Freelance', 'Contract',
+                    'Internship', 'Apprenticeship', 'Seasonal'),
             from: Joi.date(),
             to: Joi.date()
                 .greater(Joi.ref('from')),
@@ -90,10 +93,39 @@ const resumeSchema = Joi.object({
         Joi.object({
             school: Joi.string(),
             degree: Joi.string(),
+            field_of_study: Joi.string(),
+            grade: Joi.string(),
             from: Joi.date(),
             to: Joi.date()
                 .greater(Joi.ref('from')),
+            activities_and_socities: Joi.string()
+                .optional()
+                .allow(''),
             graduated: Joi.boolean()
+        })
+    ),
+    licenses_and_certifications: Joi.array().items(
+        Joi.object({
+            title: Joi.string(),
+            issuing_organization: Joi.string(),
+            credential_expires: Joi.boolean(),
+            issue_date: Joi.date(),
+            expiration_date: Joi.date(),
+            credential_id: Joi.string(),
+            credential_url: Joi.string()
+                .uri()
+        })
+    ),
+    side_projects: Joi.array().items(
+        Joi.object({
+            title: Joi.string(),
+            url: Joi.string()
+                .uri(),
+            description: Joi.string(),
+            year: Joi.number()
+                .positive()
+                .integer()
+                .min(1900)
         })
     )
 });
