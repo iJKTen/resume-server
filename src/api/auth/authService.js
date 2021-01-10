@@ -9,7 +9,9 @@ const userService = (userModel) => {
         login: async (login) => {
             const user = await userModel.getByEmail(login.email);
             if (!user) {
-                return new Error('User not found!');
+                const err = new Error('User not found!');
+                err.statusCode = 404;
+                throw err;
             }
 
             if (bcrypt.compare(user.password, login.password)) {
