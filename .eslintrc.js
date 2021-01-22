@@ -11,6 +11,7 @@ module.exports = {
         ecmaVersion: 2018
     },
     rules: {
+        'no-console': 'error',
         'comma-dangle': ['error', 'never'],
         'prefer-template': 'error',
         'complexity': ['error', 50],

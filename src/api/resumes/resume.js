@@ -18,9 +18,13 @@ module.exports = {
             const query = {
                 userId: ObjectId(userId)
             };
+            const options = {
+                projection: { 'resumes._id': 1, 'resumes.name': 1 }
+            };
+
             await client.connect();
             const collection = client.db().collection(resumeCollection);
-            const result = await collection.find(query).toArray();
+            const result = await collection.find(query, options).toArray();
             return result;
         } finally {
             client.close();

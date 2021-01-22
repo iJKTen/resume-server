@@ -2,6 +2,7 @@
 require('dotenv').config();
 const configSchema = require('./configSchema');
 
+// DO NOT LOG CONFIG OBJECT IN YOUR LOGS
 const config = {};
 
 config.db = {
