@@ -18,7 +18,9 @@ const resumeService = (resumeModel) => {
                 return result.resumes[0];
             }
 
-            return null;
+            const err = new Error('Resume not found!');
+            err.statusCode = 404;
+            throw err;
         },
         update: async (userId, resumeId, resume) => {
             const result = await resumeModel.update(userId, resumeId, resume);
@@ -26,10 +28,19 @@ const resumeService = (resumeModel) => {
                 return result.modifiedCount;
             }
 
-            return -1;
+            const err = new Error('Resume not found');
+            err.statusCode = 404;
+            throw err;
         },
         delete: async (userId, resumeId) => {
-            return await resumeModel.delete(userId, resumeId);
+            const deletedCount = await resumeModel.delete(userId, resumeId);
+            if (deletedCount === 1) {
+                return deletedCount;
+            }
+
+            const err = new Error('Resume not found!');
+            err.statusCode = 404;
+            throw err;
         }
     };
 };

@@ -14,7 +14,7 @@ const userService = (userModel) => {
                 throw err;
             }
 
-            if (bcrypt.compare(user.password, login.password)) {
+            if (await bcrypt.compare(login.password, user.password)) {
                 const accessToken = jwt.sign(
                     {
                         id: user._id.toString(),
@@ -30,7 +30,7 @@ const userService = (userModel) => {
                     accessToken: accessToken
                 };
             }
-            return new Error('User not found!');
+            throw new Error('User not found!');
         }
     };
 };

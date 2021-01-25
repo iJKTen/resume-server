@@ -19,11 +19,6 @@ module.exports = {
         try {
             const resumeId = req.params.resumeId;
             const resume = await resumeService.get(resumeId);
-            if (resume === null) {
-                const err = new Error('Resume not found!');
-                err.statusCode = 404;
-                return next(err);
-            }
             return res.status(200).json(resume);
         } catch (err) {
             err.statusCode = 404;
@@ -45,13 +40,7 @@ module.exports = {
             const userId = req.userId;
             const resumeId = req.params.resumeId;
             const resumeJson = req.validatedBody;
-            const result = await resumeService.update(userId, resumeId, resumeJson);
-            if (result === -1) {
-                const err = new Error('Resume not found');
-                err.statusCode = 404;
-                return next(err);
-            }
-
+            await resumeService.update(userId, resumeId, resumeJson);
             return res.sendStatus(200);
         } catch (err) {
             return next(err);
@@ -61,13 +50,7 @@ module.exports = {
         try {
             const userId = req.userId;
             const resumeId = req.params.resumeId;
-            const deletedCount = await resumeService.delete(userId, resumeId);
-            if (deletedCount !== 1) {
-                const err = new Error('Resume not found!');
-                err.statusCode = 404;
-                return next(err);
-            }
-
+            await resumeService.delete(userId, resumeId);
             return res.sendStatus(204);
         } catch (err) {
             return next(err);
