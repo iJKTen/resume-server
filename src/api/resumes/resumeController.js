@@ -1,9 +1,6 @@
 'use strict';
 
-const service = require('./resumeService');
-const resumeModel = require('./resume');
-
-const resumeService = service(resumeModel);
+const resumeService = require('./resumeService');
 
 module.exports = {
     index: async (req, res, next) => {

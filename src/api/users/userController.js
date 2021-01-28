@@ -1,13 +1,11 @@
 'use strict';
 
-const service = require('./userService');
-const userModel = require('../users/user');
+const userService = require('./userService');
 
 module.exports = {
     create: async (req, res, next) => {
         try {
             const registration = req.validatedBody;
-            const userService = service(userModel);
             const user = await userService.create(registration);
             if (user instanceof Error) {
                 return next(user);
@@ -20,7 +18,6 @@ module.exports = {
     get: async (req, res, next) => {
         try {
             const userId = req.userId;
-            const userService = service(userModel);
             const user = await userService.get(userId);
             if (!user) {
                 const err = new Error('User not found');
@@ -35,7 +32,6 @@ module.exports = {
     getByEmail: async (req, res, next) => {
         try {
             const email = req.params.email;
-            const userService = service(userModel);
             const user = await userService.getByEmail(email);
             if (!user) {
                 const err = new Error('User not found');
@@ -50,7 +46,6 @@ module.exports = {
     getByUsername: async (req, res, next) => {
         try {
             const username = req.params.username;
-            const userService = service(userModel);
             const user = await userService.getByUsername(username);
             if (!user) {
                 const err = new Error('User not found');
