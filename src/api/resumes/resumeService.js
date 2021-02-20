@@ -1,6 +1,16 @@
 'use strict';
 const resumeModel = require('./resume');
 
+const setCurrentPlaceOfWork = (item) => {
+    if (item.to.length === 0) {
+        return {
+            ...item,
+            current: true
+        };
+    }
+    return item;
+};
+
 module.exports = {
     index: async (userId) => {
         const result = await resumeModel.index(userId);
@@ -10,7 +20,12 @@ module.exports = {
         return [];
     },
     create: async (userId, resume) => {
-        return await resumeModel.create(userId, resume);
+        const experience = resume.experience.map((item) => setCurrentPlaceOfWork(item));
+        const resumeObj = {
+            ...resume,
+            experience
+        };
+        return await resumeModel.create(userId, resumeObj);
     },
     get: async (resumeId) => {
         const result = await resumeModel.get(resumeId);

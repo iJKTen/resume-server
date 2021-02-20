@@ -38,7 +38,7 @@ module.exports = {
                 err.statusCode = 404;
                 return next(err);
             }
-            return res.status(200).json(user);
+            return res.sendStatus(200);
         } catch (err) {
             next(err);
         }
@@ -52,7 +52,7 @@ module.exports = {
                 err.statusCode = 404;
                 return next(err);
             }
-            return res.status(200).json(user);
+            return res.sendStatus(200);
         } catch (err) {
             next(err);
         }
