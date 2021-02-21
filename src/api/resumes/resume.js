@@ -19,7 +19,7 @@ module.exports = {
                 userId: ObjectId(userId)
             };
             const options = {
-                projection: { 'resumes._id': 1, 'resumes.name': 1 }
+                projection: { 'resumes._id': 1, 'resumes.resume_name': 1 }
             };
 
             await client.connect();
