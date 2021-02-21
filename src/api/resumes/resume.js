@@ -60,9 +60,14 @@ module.exports = {
             const query = {
                 'resumes._id': ObjectId(resumeId)
             };
+
+            // const options = { 'resumes.$': 1 };
+
             await client.connect();
             const collection = client.db().collection(resumeCollection);
-            const result = await collection.findOne(query);
+            const result = await collection.findOne(query, {
+                projection: { 'resumes.$': 1 }
+            });
             return result;
         } finally {
             client.close();

@@ -29,30 +29,16 @@ module.exports = {
             next(err);
         }
     },
-    getByEmail: async (req, res, next) => {
+    isAvailable: async (req, res, next) => {
         try {
-            const email = req.params.email;
-            const user = await userService.getByEmail(email);
+            const obj = req.validatedBody;
+            const user = await userService.isAvailable(obj);
             if (!user) {
                 const err = new Error('User not found');
                 err.statusCode = 404;
                 return next(err);
             }
-            return res.sendStatus(200);
-        } catch (err) {
-            next(err);
-        }
-    },
-    getByUsername: async (req, res, next) => {
-        try {
-            const username = req.params.username;
-            const user = await userService.getByUsername(username);
-            if (!user) {
-                const err = new Error('User not found');
-                err.statusCode = 404;
-                return next(err);
-            }
-            return res.sendStatus(200);
+            return res.status(200).json(user);
         } catch (err) {
             next(err);
         }

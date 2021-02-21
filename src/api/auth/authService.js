@@ -15,7 +15,9 @@ module.exports = {
 
         const passwordIsAMatch = await bcrypt.compare(login.password, user.password);
         if (!passwordIsAMatch) {
-            throw new Error('User not found!');
+            const err = new Error('User not found!');
+            err.statusCode = 404;
+            throw err;
         }
 
         const accessToken = jwt.sign(

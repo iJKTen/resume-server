@@ -7,7 +7,7 @@ const { authValidation } = require('../api/auth');
 
 router
     .get('/:username', [authValidation.verifyToken], userController.get)
-    .head('/users/:username', userController.getByUsername)
+    .post('/isAvailable', userValidation.validateIsAvailableSchema, userController.isAvailable)
     .post('/', userValidation.validateRegisterSchema, userController.create);
 
 module.exports = router;
