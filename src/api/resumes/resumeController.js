@@ -38,7 +38,7 @@ module.exports = {
             const resumeId = req.params.resumeId;
             const resumeJson = req.validatedBody;
             await resumeService.update(userId, resumeId, resumeJson);
-            return res.sendStatus(200);
+            return res.sendStatus(201);
         } catch (err) {
             return next(err);
         }
