@@ -18,6 +18,13 @@ config.jwt = {
     'JSON_WEB_TOKEN_EXPIRATION': parseInt(process.env.JSON_WEB_TOKEN_EXPIRATION)
 };
 
+config.oauth = {
+    google: {
+        'CLIENT_ID': process.env.GOOGLE_CLIENT_ID,
+        'SECRET': process.env.GOOGLE_CLIENT_SECRET
+    }
+};
+
 (async () => {
     try {
         await configSchema.validateAsync(config);

@@ -4,12 +4,9 @@
 const { ObjectId } = require('mongodb');
 const { dbClient } = require('../../config/');
 
-const userCollection = 'users';
+const userCollection = 'oauth_users';
 
 module.exports = {
-    index: async () => {
-
-    },
     create: async (user) => {
         const client = dbClient();
         try {
@@ -18,16 +15,6 @@ module.exports = {
             const result = await collection.insertOne(user);
             return result.ops[0];
         } finally {
-            client.close();
-        }
-    },
-    getByEmail: async (email) => {
-        const client = dbClient();
-        try {
-            await client.connect();
-            const collection = client.db().collection(userCollection);
-            return await collection.findOne({ email });
-        } catch (err) {
             client.close();
         }
     },
@@ -40,11 +27,5 @@ module.exports = {
         } catch (err) {
             client.close();
         }
-    },
-    update: async () => {
-
-    },
-    delete: async () => {
-
     }
 };

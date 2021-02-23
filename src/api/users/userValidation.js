@@ -3,12 +3,6 @@
 const Joi = require('joi');
 
 const registerSchema = Joi.object({
-    username: Joi.string()
-        .required()
-        .lowercase()
-        .trim()
-        .min(3)
-        .max(14),
     email: Joi.string()
         .required()
         .lowercase()
@@ -23,11 +17,6 @@ const registerSchema = Joi.object({
 });
 
 const isAvailableSchema = Joi.object({
-    username: Joi.string()
-        .lowercase()
-        .trim()
-        .min(3)
-        .max(14),
     email: Joi.string()
         .lowercase()
         .email({

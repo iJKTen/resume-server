@@ -3,35 +3,8 @@ const userModel = require('../users/user');
 const { config } = require('../../config');
 const bcrypt = require('bcrypt');
 
-const getByEmail = async (email) => {
-    const user = await userModel.getByEmail(email.toLowerCase());
-    if (user) {
-        return {
-            'email': user.email
-        };
-    }
-    return null;
-};
-
-const getByUsername = async (username) => {
-    const user = await userModel.getByUsername(username.toLowerCase());
-    if (user) {
-        return {
-            'username': user.username
-        };
-    }
-    return null;
-};
-
 module.exports = {
     create: async (registration) => {
-        const existingUsername = await userModel.getByUsername(registration.username);
-        if (existingUsername) {
-            const err = new Error('Username is taken');
-            err.statusCode = 409;
-            return err;
-        }
-
         const existingUser = await userModel.getByEmail(registration.email);
         if (existingUser) {
             const err = new Error('Email address is taken');
@@ -64,9 +37,12 @@ module.exports = {
         return null;
     },
     isAvailable: async (obj) => {
-        if ('email' in obj) {
-            return getByEmail(obj.email);
+        const user = await userModel.getByEmail(obj.email.toLowerCase());
+        if (user) {
+            return {
+                'email': user.email
+            };
         }
-        return getByUsername(obj.username);
+        return null;
     }
 };

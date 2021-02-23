@@ -8,14 +8,14 @@ module.exports = {
     login: async (login) => {
         const user = await userModel.getByEmail(login.email);
         if (!user) {
-            const err = new Error('User not found!');
+            const err = new Error('Email/Password is incorrect!');
             err.statusCode = 404;
             throw err;
         }
 
         const passwordIsAMatch = await bcrypt.compare(login.password, user.password);
         if (!passwordIsAMatch) {
-            const err = new Error('User not found!');
+            const err = new Error('Email/Password is incorrect!');
             err.statusCode = 404;
             throw err;
         }
