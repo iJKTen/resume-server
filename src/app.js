@@ -9,7 +9,7 @@ const passport = require('passport');
 const app = express();
 
 const corsOptions = {
-    origin: 'http://localhost:3001'
+    origin: 'https://silly-keller-c1e934.netlify.app'
 };
 
 app.use(compression());
@@ -17,14 +17,9 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use((req, res, next) => {
-    console.log('app origin', req.headers.origin);
     res.header(
         'Access-Control-Allow-Headers',
         'x-access-token, Origin, Content-Type'
-    );
-    res.header(
-        'Access-Control-Allow-Origin',
-        'https://silly-keller-c1e934.netlify.app'
     );
     next();
 });
