@@ -4,7 +4,6 @@ const compression = require('compression');
 const express = require('express');
 const routes = require('./routes');
 const cors = require('cors');
-const passport = require('passport');
 
 const app = express();
 
@@ -23,8 +22,6 @@ app.use((req, res, next) => {
     );
     next();
 });
-
-app.use(passport.initialize());
 
 app.use('/api', routes);
 

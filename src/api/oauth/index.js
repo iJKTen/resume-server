@@ -1,5 +1,5 @@
-'use strict'
+'use strict';
 
-const passport = require('./passport');
+const service = require('./oauthService');
 
-module.exports = passport;
+module.exports = service;

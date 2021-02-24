@@ -5,13 +5,13 @@ const create = async (newUser) => {
     const user = await userModel.create(newUser);
 
     return {
-        _id: user._id,
+        _id: user._id.toString(),
         email: user.email
     };
 };
 
 const get = async (id) => {
-    const user = await userModel.getById(id);
+    const user = await userModel.getByOAuthId(id);
     if (user) {
         return user;
     }
@@ -19,10 +19,14 @@ const get = async (id) => {
 };
 
 module.exports = {
-    find_or_create: async (newUser) => {
-        const existingUser = await get(newUser.id);
+    find_or_create: async (userId, email) => {
+        const oauthUser = {
+            oauthId: userId,
+            email: email
+        };
+        const existingUser = await get(userId);
         if (existingUser === null) {
-            return create(newUser);
+            return create(oauthUser);
         }
 
         return existingUser;

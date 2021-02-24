@@ -3,6 +3,7 @@
 const Joi = require('joi');
 const jwt = require('jsonwebtoken');
 const { config } = require('../../config');
+const oauthService = require('../oauth');
 
 const loginSchema = Joi.object({
     email: Joi.string()
@@ -51,12 +52,13 @@ module.exports = {
 
         try {
             const oauthToken = jwt.decode(token);
-            console.log(oauthToken)
+
             if ('iss' in oauthToken) {
                 const expDate = new Date(oauthToken.exp * 1000);
                 const now = new Date();
                 if ((now - expDate) < 0) {
-                    req.userId = oauthToken.sub;
+                    const user = await oauthService.find_or_create(oauthToken.sub, oauthToken.email);
+                    req.userId = user._id;
                     return next();
                 }
 
@@ -64,6 +66,7 @@ module.exports = {
                 err.statusCode = 401;
                 return next(err);
             }
+
             const decodedToken = jwt.verify(token, config.jwt.JSON_WEB_TOKEN_SECRET);
             req.userId = decodedToken.id;
             return next();

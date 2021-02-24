@@ -29,7 +29,7 @@ module.exports = {
     },
     get: async (resumeId) => {
         const result = await resumeModel.get(resumeId);
-        if (result.resumes.length > 0) {
+        if (result && result.resumes.length > 0) {
             return result.resumes[0];
         }
 

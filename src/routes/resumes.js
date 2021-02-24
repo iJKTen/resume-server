@@ -11,7 +11,7 @@ router
         authValidation.verifyToken,
         resumeValidation.validateResume
     ], resumeController.create)
-    .get('/:resumeId', resumeController.get)
+    .get('/:resumeId', authValidation.verifyToken, resumeController.get)
     .put('/:resumeId', [
         authValidation.verifyToken,
         resumeValidation.validateResume
