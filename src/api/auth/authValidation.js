@@ -50,11 +50,21 @@ module.exports = {
         }
 
         try {
-            const s = jwt.decode(token);
-            console.log(s);
+            const oauthToken = jwt.decode(token);
+            if ('iss' in oauthToken) {
+                const expDate = new Date(oauthToken.exp * 1000);
+                const now = new Date();
+                if ((now - expDate) < 0) {
+                    return next();
+                }
+
+                const err = new Error();
+                err.statusCode = 401;
+                return next(err);
+            }
             const decodedToken = jwt.verify(token, config.jwt.JSON_WEB_TOKEN_SECRET);
             req.userId = decodedToken.id;
-            next();
+            return next();
         } catch (err) {
             err.statusCode = 401;
             return next(err);
