@@ -24,7 +24,7 @@ app.use((req, res, next) => {
     );
     res.header(
         'Access-Control-Allow-Origin',
-        req.headers.origin
+        'https://silly-keller-c1e934.netlify.app'
     );
     next();
 });
