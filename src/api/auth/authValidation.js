@@ -50,6 +50,8 @@ module.exports = {
         }
 
         try {
+            const s = jwt.decode(token);
+            console.log(s);
             const decodedToken = jwt.verify(token, config.jwt.JSON_WEB_TOKEN_SECRET);
             req.userId = decodedToken.id;
             next();
