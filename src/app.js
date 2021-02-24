@@ -5,7 +5,7 @@ const express = require('express');
 const routes = require('./routes');
 const cors = require('cors');
 const { config } = require('./config');
-console.log(config)
+
 const app = express();
 
 const corsOptions = {
