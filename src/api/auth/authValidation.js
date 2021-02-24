@@ -52,7 +52,7 @@ module.exports = {
 
         try {
             const oauthToken = jwt.decode(token);
-
+            console.log(oauthToken);
             if ('iss' in oauthToken) {
                 const expDate = new Date(oauthToken.exp * 1000);
                 const now = new Date();
