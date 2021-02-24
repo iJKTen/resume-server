@@ -4,6 +4,7 @@
   "description": "App using twiiter, facebook, google, Apple, & local auth using PassportJS",
   "main": "index.js",
   "scripts": {
+    "start": "NODE_ENV=production node index.js",
     "test": "jest",
     "dev": "NODE_ENV=development nodemon --inspect --trace-deprecation index.js"
   },
