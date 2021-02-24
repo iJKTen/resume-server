@@ -24,16 +24,9 @@ const configSchema = Joi.object({
             .required()
             .error((errors) => new Error('"JSON_WEB_TOKEN_EXPIRATION" needs to be a number in seconds.'))
     }),
-    oauth: Joi.object({
-        google: Joi.object({
-            CLIENT_ID: Joi.string()
-                .required()
-                .error((errors) => new Error('"GOOGLE_CLIENT_ID" is not present')),
-            SECRET: Joi.string()
-                .required()
-                .error((errors) => new Error('"GOOGLE_CLIENT_SECRET" is not present'))
-        })
-    })
+    origin: Joi.string()
+        .required()
+        .error((errors) => new Error('"CLIENT_ORIGIN" needs to be the URL where your react app is running'))
 });
 
 module.exports = configSchema;

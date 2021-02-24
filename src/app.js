@@ -4,11 +4,12 @@ const compression = require('compression');
 const express = require('express');
 const routes = require('./routes');
 const cors = require('cors');
-
+const { config } = require('./config');
+console.log(config)
 const app = express();
 
 const corsOptions = {
-    origin: 'https://silly-keller-c1e934.netlify.app'
+    origin: config.origin
 };
 
 app.use(compression());
