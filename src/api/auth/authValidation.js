@@ -55,6 +55,7 @@ module.exports = {
                 const expDate = new Date(oauthToken.exp * 1000);
                 const now = new Date();
                 if ((now - expDate) < 0) {
+                    req.userId = oauthToken.sub;
                     return next();
                 }
 
