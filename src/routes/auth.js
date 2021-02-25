@@ -6,7 +6,6 @@ const { authController, authValidation } = require('../api/auth');
 
 router
     .post('/login', authValidation.validateLoginSchema, authController.login)
-    .post('/logout', authController.logout)
-    .post('/forgotpassword', authValidation.forgotPassword, authController.forgotPassword);
+    .post('/logout', authController.logout);
 
 module.exports = router;

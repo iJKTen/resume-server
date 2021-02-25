@@ -26,7 +26,12 @@ const configSchema = Joi.object({
     }),
     origin: Joi.string()
         .required()
-        .error((errors) => new Error('"CLIENT_ORIGIN" needs to be the URL where your react app is running'))
+        .error((errors) => new Error('"CLIENT_ORIGIN" needs to be the URL where your react app is running')),
+    smtp: Joi.object({
+        API_KEY: Joi.string()
+            .required()
+            .error((errors) => new Error('"EMAIL_SERVICE_API_KEY" not found.'))
+    })
 });
 
 module.exports = configSchema;

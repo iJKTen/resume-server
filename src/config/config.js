@@ -20,6 +20,10 @@ config.jwt = {
     'JSON_WEB_TOKEN_EXPIRATION': parseInt(process.env.JSON_WEB_TOKEN_EXPIRATION)
 };
 
+config.smtp = {
+    'API_KEY': process.env.EMAIL_SERVICE_API_KEY
+};
+
 (async () => {
     try {
         await configSchema.validateAsync(config);

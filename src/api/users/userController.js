@@ -48,5 +48,20 @@ module.exports = {
     },
     delete: async (req, res, next) => {
 
+    },
+    forgotPassword: async (req, res, next) => {
+        try {
+            const user = req.validatedBody;
+            userService.forgotPassword(user);
+        } catch (err) {
+            next(err);
+        }
+    },
+    resetPassword: async (req, res, next) => {
+        try {
+            const user = req.validatedBody;
+        } catch (err) {
+            next(err);
+        }
     }
 };

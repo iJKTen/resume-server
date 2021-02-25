@@ -13,8 +13,5 @@ module.exports = {
     },
     logout: async (req, res, next) => {
 
-    },
-    forgotPassword: async (req, res, next) => {
-
     }
 };

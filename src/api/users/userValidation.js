@@ -22,7 +22,7 @@ const isAvailableSchema = Joi.object({
         .email({
             minDomainSegments: 2
         })
-}).xor('username', 'email');
+});
 
 module.exports = {
     validateRegisterSchema: async (req, res, next) => {
