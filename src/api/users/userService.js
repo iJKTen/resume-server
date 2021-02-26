@@ -7,6 +7,11 @@ const { eventEmitter, ...email } = require('../../services');
 
 const getSalt = async () => await bcrypt.genSalt(config.crpyto.BCRYPT_WORK_FACTOR);
 
+const encrypt = async (password) => {
+    const salt = await getSalt();
+    return await bcrypt.hash(password, salt);
+};
+
 module.exports = {
     create: async (registration) => {
         const existingUser = await userModel.getByEmail(registration.email);
@@ -15,11 +20,6 @@ module.exports = {
             err.statusCode = 409;
             return err;
         }
-
-        const encrypt = async (password) => {
-            const salt = await getSalt();
-            return await bcrypt.hash(password, salt);
-        };
 
         const { password_confirmation, ...registrationUser } = {
             ...registration,
@@ -60,12 +60,30 @@ module.exports = {
         const userObj = await userModel.forgotPassword(user.email, token, digest, tokenExp);
         const data = {
             email: user.email,
-            link: `${config.origin}/api/resetpassword/${userObj.value._id}/${token}`
+            link: `${config.origin}/resetpassword/${userObj.value._id}/${token}`
         };
 
         eventEmitter.emit('forgotPassword', email.forgotPassword, data);
     },
-    resetPassword: async (user) => {
+    resetPassword: async (userId, token, user) => {
+        const existingUser = await userModel.getById(userId);
+        const passwordIsAMatch = await bcrypt.compare(token, existingUser.resetPwdDigest);
 
+        if (!passwordIsAMatch) {
+            const err = new Error('Password reset token not found');
+            err.statusCode = 404;
+            throw err;
+        }
+
+        const now = new Date();
+
+        if (now > existingUser.resetPwdTokenExp) {
+            const err = new Error('Password link expired');
+            err.statusCode = 500;
+            throw err;
+        }
+
+        const newPassword = await encrypt(user.password);
+        await userModel.changePassword(userId, newPassword);
     }
 };

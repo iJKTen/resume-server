@@ -24,6 +24,12 @@ const isAvailableSchema = Joi.object({
         })
 });
 
+const resetPasswordSchema = Joi.object({
+    password: Joi.string()
+        .required(),
+    password_confirmation: Joi.ref('password')
+});
+
 module.exports = {
     validateRegisterSchema: async (req, res, next) => {
         try {
@@ -37,6 +43,15 @@ module.exports = {
     validateIsAvailableSchema: async (req, res, next) => {
         try {
             const value = await isAvailableSchema.validateAsync(req.body);
+            req.validatedBody = value;
+            return next();
+        } catch (err) {
+            return next(err);
+        }
+    },
+    validateResetPasswordSchema: async (req, res, next) => {
+        try {
+            const value = await resetPasswordSchema.validateAsync(req.body);
             req.validatedBody = value;
             return next();
         } catch (err) {

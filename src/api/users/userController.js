@@ -53,13 +53,18 @@ module.exports = {
         try {
             const user = req.validatedBody;
             userService.forgotPassword(user);
+            return res.status(200).json({});
         } catch (err) {
             next(err);
         }
     },
     resetPassword: async (req, res, next) => {
         try {
-            const user = req.validatedBody;
+            const userId = req.params.userId;
+            const token = req.params.token;
+            const obj = req.validatedBody;
+            await userService.resetPassword(userId, token, obj);
+            return res.status(200).json({});
         } catch (err) {
             next(err);
         }

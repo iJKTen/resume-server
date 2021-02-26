@@ -69,5 +69,22 @@ module.exports = {
         } finally {
             client.close();
         }
+    },
+    changePassword: async (id, password) => {
+        const client = dbClient();
+        try {
+            await client.connect();
+            const collection = client.db().collection(userCollection);
+            return await collection.findOneAndUpdate({ _id: ObjectId(id) }, {
+                $set: {
+                    password: password,
+                    resetPwdDigest: '',
+                    resetPwdToken: '',
+                    resetPwdTokenExp: ''
+                }
+            });
+        } finally {
+            client.close();
+        }
     }
 };

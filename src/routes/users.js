@@ -10,6 +10,6 @@ router
     .post('/isAvailable', userValidation.validateIsAvailableSchema, userController.isAvailable)
     .post('/', userValidation.validateRegisterSchema, userController.create)
     .post('/forgotpassword', authValidation.forgotPassword, userController.forgotPassword)
-    .post('/resetpassword', userController.resetPassword);
+    .post('/resetpassword/:userId/:token', userValidation.validateResetPasswordSchema, userController.resetPassword);
 
 module.exports = router;
