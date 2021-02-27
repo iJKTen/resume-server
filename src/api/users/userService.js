@@ -85,5 +85,9 @@ module.exports = {
 
         const newPassword = await encrypt(user.password);
         await userModel.changePassword(userId, newPassword);
+    },
+    changePassword: async (userId, obj) => {
+        const password = await encrypt(obj.password);
+        await userModel.changePassword(userId, password);
     }
 };

@@ -68,5 +68,15 @@ module.exports = {
         } catch (err) {
             next(err);
         }
+    },
+    changePassword: async (req, res, next) => {
+        try {
+            const userId = req.params.userId;
+            const obj = req.validatedBody;
+            await userService.changePassword(userId, obj);
+            return res.status(200).json({});
+        } catch (err) {
+            next(err);
+        }
     }
 };
