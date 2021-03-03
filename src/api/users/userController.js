@@ -19,11 +19,6 @@ module.exports = {
         try {
             const userId = req.userId;
             const user = await userService.get(userId);
-            if (!user) {
-                const err = new Error('User not found');
-                err.statusCode = 404;
-                return next(err);
-            }
             return res.status(200).json(user);
         } catch (err) {
             next(err);
@@ -33,11 +28,6 @@ module.exports = {
         try {
             const obj = req.validatedBody;
             const user = await userService.isAvailable(obj);
-            if (!user) {
-                const err = new Error('User not found');
-                err.statusCode = 404;
-                return next(err);
-            }
             return res.status(200).json(user);
         } catch (err) {
             next(err);

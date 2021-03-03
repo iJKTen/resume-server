@@ -4,6 +4,7 @@ const { config } = require('../../config');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const { eventEmitter, ...email } = require('../../services');
+const { HttpError } = require('../../utils');
 
 const getSalt = async () => await bcrypt.genSalt(config.crpyto.BCRYPT_WORK_FACTOR);
 
@@ -16,8 +17,7 @@ module.exports = {
     create: async (registration) => {
         const existingUser = await userModel.getByEmail(registration.email);
         if (existingUser) {
-            const err = new Error('Email address is taken');
-            err.statusCode = 409;
+            const err = new HttpError.HttpConflict('Email address is taken', null);
             return err;
         }
 
@@ -38,7 +38,7 @@ module.exports = {
         if (user) {
             return user;
         }
-        return null;
+        throw new HttpError.HttpNotFound('User not found', null);
     },
     isAvailable: async (obj) => {
         const user = await userModel.getByEmail(obj.email.toLowerCase());
@@ -47,7 +47,7 @@ module.exports = {
                 'email': user.email
             };
         }
-        return null;
+        throw new HttpError.HttpNotFound('User not found', null);
     },
     forgotPassword: async (user) => {
         const expirationInMinutes = 15;
@@ -70,16 +70,14 @@ module.exports = {
         const passwordIsAMatch = await bcrypt.compare(token, existingUser.resetPwdDigest);
 
         if (!passwordIsAMatch) {
-            const err = new Error('Password reset token not found');
-            err.statusCode = 404;
+            const err = new HttpError.HttpNotFound('Password reset token not found', null);
             throw err;
         }
 
         const now = new Date();
 
         if (now > existingUser.resetPwdTokenExp) {
-            const err = new Error('Password link expired');
-            err.statusCode = 500;
+            const err = new HttpError.HttpExpired('Password link expired', null);
             throw err;
         }
 

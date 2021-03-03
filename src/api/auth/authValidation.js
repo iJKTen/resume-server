@@ -45,9 +45,7 @@ module.exports = {
     verifyToken: async (req, res, next) => {
         const token = req.headers['x-access-token'];
         if (!token) {
-            const err = new Error('Token not found!');
-            err.statusCode = 403;
-            return next(err);
+            return res.respond.jwtTokenNotFound('Token not found', null);
         }
 
         try {
@@ -61,25 +59,20 @@ module.exports = {
                     return next();
                 }
 
-                const err = new Error();
-                err.statusCode = 401;
-                return next(err);
+                return res.respond.unauthorized('Token expired', null);
             }
 
             const decodedToken = jwt.verify(token, config.jwt.JSON_WEB_TOKEN_SECRET);
             req.userId = decodedToken.id;
             return next();
         } catch (err) {
-            err.statusCode = 401;
-            return next(err);
+            return res.respond.unauthorized(err, null);
         }
     },
     isCurrentUser: async (req, res, next) => {
         const id = req.params.id;
         if (id != req.userId) {
-            const err = new Error('User not authorized');
-            err.statusCode = 401;
-            return next(err);
+            return res.respond.unauthorized('User not authorized', null);
         }
         next();
     }

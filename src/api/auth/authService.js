@@ -3,21 +3,20 @@ const userModel = require('../users/user');
 const jwt = require('jsonwebtoken');
 const { config } = require('../../config');
 const bcrypt = require('bcrypt');
+const { HttpError } = require('../../utils');
+
+const userNotFound = () => new HttpError.HttpNotFound('Email/Password is incorrect', null);
 
 module.exports = {
     login: async (login) => {
         const user = await userModel.getByEmail(login.email);
         if (!user) {
-            const err = new Error('Email/Password is incorrect!');
-            err.statusCode = 404;
-            throw err;
+            throw userNotFound();
         }
 
         const passwordIsAMatch = await bcrypt.compare(login.password, user.password);
         if (!passwordIsAMatch) {
-            const err = new Error('Email/Password is incorrect!');
-            err.statusCode = 404;
-            throw err;
+            throw userNotFound();
         }
 
         const accessToken = jwt.sign(

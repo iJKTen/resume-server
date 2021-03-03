@@ -18,7 +18,6 @@ module.exports = {
             const resume = await resumeService.get(resumeId);
             return res.status(200).json(resume);
         } catch (err) {
-            err.statusCode = 404;
             return next(err);
         }
     },

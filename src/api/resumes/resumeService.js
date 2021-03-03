@@ -1,5 +1,6 @@
 'use strict';
 const resumeModel = require('./resume');
+const { HttpNotFound } = require('../../utils');
 
 const setCurrentPlaceOfWork = (item) => {
     if (item.to.length === 0) {
@@ -33,8 +34,7 @@ module.exports = {
             return result.resumes[0];
         }
 
-        const err = new Error('Resume not found!');
-        err.statusCode = 404;
+        const err = new HttpNotFound('Resume not found!', `Resume with id ${resumeId} not found`);
         throw err;
     },
     update: async (userId, resumeId, resume) => {
@@ -43,8 +43,7 @@ module.exports = {
             return result.modifiedCount;
         }
 
-        const err = new Error('Resume not found');
-        err.statusCode = 404;
+        const err = new HttpNotFound('Resume not found!', `Resume with id ${resumeId} not found`);
         throw err;
     },
     delete: async (userId, resumeId) => {
@@ -53,8 +52,7 @@ module.exports = {
             return deletedCount;
         }
 
-        const err = new Error('Resume not found!');
-        err.statusCode = 404;
+        const err = new HttpNotFound('Resume not found!', `Resume with id ${resumeId} not found`);
         throw err;
     }
 };

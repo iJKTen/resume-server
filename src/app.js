@@ -5,6 +5,7 @@ const express = require('express');
 const routes = require('./routes');
 const cors = require('cors');
 const { config } = require('./config');
+const { attachResponder } = require('./utils');
 
 const app = express();
 
@@ -23,6 +24,8 @@ app.use((req, res, next) => {
     );
     next();
 });
+
+app.use(attachResponder);
 
 app.use('/api', routes);
 
