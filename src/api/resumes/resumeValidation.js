@@ -137,7 +137,7 @@ module.exports = {
             req.validatedBody = validatedBody;
             return next();
         } catch (err) {
-            return next(err);
+            res.respond.badRequest(err, null);
         }
     }
 };

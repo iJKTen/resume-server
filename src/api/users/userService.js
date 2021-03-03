@@ -18,7 +18,7 @@ module.exports = {
         const existingUser = await userModel.getByEmail(registration.email);
         if (existingUser) {
             const err = new HttpError.HttpConflict('Email address is taken', null);
-            return err;
+            throw err;
         }
 
         const { password_confirmation, ...registrationUser } = {

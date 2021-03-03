@@ -30,7 +30,7 @@ module.exports = {
             req.validatedBody = value;
             next();
         } catch (err) {
-            next(err);
+            res.respond.badRequest(err, null);
         }
     },
     forgotPassword: async (req, res, next) => {
@@ -39,7 +39,7 @@ module.exports = {
             req.validatedBody = value;
             next();
         } catch (err) {
-            next(err);
+            res.respond.badRequest(err, null);
         }
     },
     verifyToken: async (req, res, next) => {
@@ -59,7 +59,7 @@ module.exports = {
                     return next();
                 }
 
-                return res.respond.unauthorized('Token expired', null);
+                return res.respond.expired('Token expired', null);
             }
 
             const decodedToken = jwt.verify(token, config.jwt.JSON_WEB_TOKEN_SECRET);

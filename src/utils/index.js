@@ -2,8 +2,10 @@
 
 const HttpError = require('./HttpError');
 const attachResponder = require('./errorMiddleware');
+const logger = require('./logger');
 
 module.exports = {
     HttpError,
-    attachResponder
+    attachResponder,
+    logger
 };

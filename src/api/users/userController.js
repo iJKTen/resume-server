@@ -7,9 +7,6 @@ module.exports = {
         try {
             const registration = req.validatedBody;
             const user = await userService.create(registration);
-            if (user instanceof Error) {
-                return next(user);
-            }
             return res.status(200).json(user);
         } catch (err) {
             next(err);

@@ -20,8 +20,14 @@ const createResponder = (req, res, next) => {
         unauthorized: (err, data) => {
             return forwardError(err, HttpError.HttpUnauthorized, data);
         },
+        expired: (err, data) => {
+            return forwardError(err, HttpError.HttpExpired, data);
+        },
         jwtTokenNotFound: (err, data) => {
             return forwardError(err, HttpError.HttpUnauthorized, data);
+        },
+        badRequest: (err, data) => {
+            return forwardError(err, HttpError.HttpBadRequest, data);
         }
     };
 };

@@ -37,7 +37,7 @@ module.exports = {
             req.validatedBody = value;
             return next();
         } catch (err) {
-            return next(err);
+            res.respond.badRequest(err, null);
         }
     },
     validateIsAvailableSchema: async (req, res, next) => {
@@ -46,7 +46,7 @@ module.exports = {
             req.validatedBody = value;
             return next();
         } catch (err) {
-            return next(err);
+            res.respond.badRequest(err, null);
         }
     },
     validateResetPasswordSchema: async (req, res, next) => {
@@ -55,7 +55,7 @@ module.exports = {
             req.validatedBody = value;
             return next();
         } catch (err) {
-            return next(err);
+            res.respond.badRequest(err, null);
         }
     }
 };
