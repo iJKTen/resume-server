@@ -2,7 +2,7 @@
 'use strict';
 
 const { ObjectId } = require('mongodb');
-const { dbClient } = require('../../config/');
+const { dbClient } = require('../../config');
 
 const userCollection = 'users';
 
