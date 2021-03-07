@@ -4,8 +4,14 @@ const jwt = require('jsonwebtoken');
 const { config } = require('../../config');
 const bcrypt = require('bcrypt');
 const { HttpError } = require('../../utils');
+const { StatusCodes } = require('http-status-codes');
 
-const userNotFound = () => new HttpError.HttpNotFound('Email/Password is incorrect', null);
+const userNotFound = () => new HttpError({
+    name: '',
+    msg: 'Email/Password is incorrect',
+    statusCode: StatusCodes.NOT_FOUND,
+    data: null
+});
 
 module.exports = (repository) => {
     return {

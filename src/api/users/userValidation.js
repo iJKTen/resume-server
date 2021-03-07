@@ -1,5 +1,6 @@
 'use strict';
 
+const { StatusCodes } = require('http-status-codes');
 const Joi = require('joi');
 
 const registerSchema = Joi.object({
@@ -37,7 +38,7 @@ module.exports = {
             req.validatedBody = value;
             return next();
         } catch (err) {
-            res.respond.badRequest(err, null);
+            res.respond.withError(err, StatusCodes.BAD_REQUEST, null);
         }
     },
     validateIsAvailableSchema: async (req, res, next) => {
@@ -46,7 +47,7 @@ module.exports = {
             req.validatedBody = value;
             return next();
         } catch (err) {
-            res.respond.badRequest(err, null);
+            res.respond.withError(err, StatusCodes.BAD_REQUEST, null);
         }
     },
     validateResetPasswordSchema: async (req, res, next) => {
@@ -55,7 +56,7 @@ module.exports = {
             req.validatedBody = value;
             return next();
         } catch (err) {
-            res.respond.badRequest(err, null);
+            res.respond.withError(err, StatusCodes.BAD_REQUEST, null);
         }
     }
 };

@@ -1,5 +1,6 @@
 'use strict';
 
+const { StatusCodes } = require('http-status-codes');
 const Joi = require('joi');
 const jwt = require('jsonwebtoken');
 const { config } = require('../../config');
@@ -30,7 +31,7 @@ module.exports = {
             req.validatedBody = value;
             next();
         } catch (err) {
-            res.respond.badRequest(err, null);
+            res.respond.withError(err, StatusCodes.BAD_REQUEST, null);
         }
     },
     forgotPassword: async (req, res, next) => {
@@ -39,13 +40,13 @@ module.exports = {
             req.validatedBody = value;
             next();
         } catch (err) {
-            res.respond.badRequest(err, null);
+            res.respond.withError(err, StatusCodes.BAD_REQUEST, null);
         }
     },
     verifyToken: async (req, res, next) => {
         const token = req.headers['x-access-token'];
         if (!token) {
-            return res.respond.jwtTokenNotFound('Token not found', null);
+            return res.respond.withError('Token not found', StatusCodes.BAD_REQUEST, null);
         }
 
         try {
@@ -59,20 +60,20 @@ module.exports = {
                     return next();
                 }
 
-                return res.respond.expired('Token expired', null);
+                return res.respond.withError('Token expired or not found', StatusCodes.UNAUTHORIZED, null);
             }
 
             const decodedToken = jwt.verify(token, config.jwt.JSON_WEB_TOKEN_SECRET);
             req.userId = decodedToken.id;
             return next();
         } catch (err) {
-            return res.respond.unauthorized(err, null);
+            res.respond.withError(err, StatusCodes.UNAUTHORIZED, null);
         }
     },
     isCurrentUser: async (req, res, next) => {
         const id = req.params.id;
         if (id != req.userId) {
-            return res.respond.unauthorized('User not authorized', null);
+            return res.respond.withError('User not authorized', StatusCodes.UNAUTHORIZED, null);
         }
         next();
     }

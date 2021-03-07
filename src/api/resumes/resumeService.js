@@ -1,6 +1,7 @@
 'use strict';
 
-const { HttpNotFound } = require('../../utils');
+const { StatusCodes } = require('http-status-codes');
+const { HttpError } = require('../../utils');
 
 const setCurrentPlaceOfWork = (item) => {
     if (item.to.length === 0) {
@@ -35,7 +36,12 @@ module.exports = (respository) => {
                 return result.resumes[0];
             }
 
-            const err = new HttpNotFound('Resume not found!', `Resume with id ${resumeId} not found`);
+            const err = new HttpError({
+                name: 'Resume not found!',
+                msg: `Resume with id ${resumeId} not found`,
+                statusCode: StatusCodes.NOT_FOUND,
+                data: null
+            });
             throw err;
         },
         update: async (userId, resumeId, resume) => {
@@ -44,7 +50,7 @@ module.exports = (respository) => {
                 return result.modifiedCount;
             }
 
-            const err = new HttpNotFound('Resume not found!', `Resume with id ${resumeId} not found`);
+            const err = new HttpError('Resume not found!', `Resume with id ${resumeId} not found`);
             throw err;
         },
         delete: async (userId, resumeId) => {
@@ -53,7 +59,7 @@ module.exports = (respository) => {
                 return deletedCount;
             }
 
-            const err = new HttpNotFound('Resume not found!', `Resume with id ${resumeId} not found`);
+            const err = new HttpError('Resume not found!', `Resume with id ${resumeId} not found`);
             throw err;
         }
     };

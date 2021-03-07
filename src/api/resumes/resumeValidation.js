@@ -1,5 +1,6 @@
 'use strict';
 
+const { StatusCodes } = require('http-status-codes');
 const Joi = require('joi');
 
 const resumeSchema = Joi.object({
@@ -137,7 +138,7 @@ module.exports = {
             req.validatedBody = validatedBody;
             return next();
         } catch (err) {
-            res.respond.badRequest(err, null);
+            res.respond.withError(err, StatusCodes.BAD_REQUEST, null);
         }
     }
 };

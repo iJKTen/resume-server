@@ -7,27 +7,20 @@ const attachResponder = (req, res, next) => {
 };
 
 const createResponder = (req, res, next) => {
-    const forwardError = (err, ErrorClass = Error, data) => {
+    const forwardError = (err, statusCode, data) => {
         const msg = err instanceof Error ? err.message : err;
-        const errorToForward = new ErrorClass(msg, data);
+        const errorToForward = new HttpError({
+            name: '',
+            msg: msg,
+            statusCode: statusCode,
+            data: data
+        });
         next(errorToForward);
     };
 
     return {
-        notFound: (err, data) => {
-            return forwardError(err, HttpError.HttpNotFound, data);
-        },
-        unauthorized: (err, data) => {
-            return forwardError(err, HttpError.HttpUnauthorized, data);
-        },
-        expired: (err, data) => {
-            return forwardError(err, HttpError.HttpExpired, data);
-        },
-        jwtTokenNotFound: (err, data) => {
-            return forwardError(err, HttpError.HttpUnauthorized, data);
-        },
-        badRequest: (err, data) => {
-            return forwardError(err, HttpError.HttpBadRequest, data);
+        withError: (err, statusCode, data) => {
+            return forwardError(err, statusCode, data);
         }
     };
 };

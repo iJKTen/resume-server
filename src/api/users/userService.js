@@ -1,5 +1,6 @@
 'use strict';
 
+const { StatusCodes } = require('http-status-codes');
 const { config } = require('../../config');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
@@ -18,7 +19,12 @@ module.exports = (repository) => {
         create: async (registration) => {
             const existingUser = await repository.getByEmail(registration.email);
             if (existingUser) {
-                const err = new HttpError.HttpConflict('Email address is taken', null);
+                const err = new HttpError({
+                    name: 'Email address is taken!',
+                    msg: `Email address is taken`,
+                    statusCode: StatusCodes.CONFLICT,
+                    data: null
+                });
                 throw err;
             }
 
@@ -39,7 +45,14 @@ module.exports = (repository) => {
             if (user) {
                 return user;
             }
-            throw new HttpError.HttpNotFound('User not found', null);
+
+            const err = new HttpError({
+                name: 'User not found!',
+                msg: `User not found`,
+                statusCode: StatusCodes.NOT_FOUND,
+                data: null
+            });
+            throw err;
         },
         isAvailable: async (obj) => {
             const user = await repository.getByEmail(obj.email.toLowerCase());
@@ -48,7 +61,14 @@ module.exports = (repository) => {
                     'email': user.email
                 };
             }
-            throw new HttpError.HttpNotFound('User not found', null);
+
+            const err = new HttpError({
+                name: 'User not found!',
+                msg: `User not found`,
+                statusCode: StatusCodes.NOT_FOUND,
+                data: null
+            });
+            throw err;
         },
         forgotPassword: async (user) => {
             const expirationInMinutes = 15;
@@ -71,14 +91,24 @@ module.exports = (repository) => {
             const passwordIsAMatch = await bcrypt.compare(token, existingUser.resetPwdDigest);
 
             if (!passwordIsAMatch) {
-                const err = new HttpError.HttpNotFound('Password reset token not found', null);
+                const err = new HttpError({
+                    name: 'Password reset token not found!',
+                    msg: 'Password reset token not found!',
+                    statusCode: StatusCodes.NOT_FOUND,
+                    data: null
+                });
                 throw err;
             }
 
             const now = new Date();
 
             if (now > existingUser.resetPwdTokenExp) {
-                const err = new HttpError.HttpExpired('Password link expired', null);
+                const err = new HttpError({
+                    name: 'Password reset token not found!',
+                    msg: 'Password reset token not found!',
+                    statusCode: StatusCodes.GONE,
+                    data: null
+                });
                 throw err;
             }
 
