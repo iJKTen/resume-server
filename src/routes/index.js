@@ -2,11 +2,11 @@
 'use strict';
 
 const router = require('express').Router();
-const usersRouter = require('./users');
-const authRouter = require('./auth');
-const resumesRouter = require('./resumes');
+const usersRoutes = require('./users');
+const authRoutes = require('./auth');
+const resumesRoutes = require('./resumes');
 
-router.use('/users', usersRouter);
-router.use('/auth', authRouter);
-router.use('/resumes', resumesRouter);
+router.use('/users', usersRoutes());
+router.use('/auth', authRoutes());
+router.use('/resumes', resumesRoutes());
 module.exports = router;

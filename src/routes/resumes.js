@@ -2,20 +2,26 @@
 'use strict';
 
 const router = require('express').Router();
-const { resumeController, resumeValidation } = require('../api/resumes');
+const { resumeController, resumeValidation, resumeRepository } = require('../api/resumes');
 const { authValidation } = require('../api/auth');
 
-router
-    .get('/', [authValidation.verifyToken], resumeController.index)
-    .post('/', [
-        authValidation.verifyToken,
-        resumeValidation.validateResume
-    ], resumeController.create)
-    .get('/:resumeId', authValidation.verifyToken, resumeController.get)
-    .put('/:resumeId', [
-        authValidation.verifyToken,
-        resumeValidation.validateResume
-    ], resumeController.update)
-    .delete('/:resumeId', [authValidation.verifyToken], resumeController.delete);
+const resumeRoutes = () => {
+    const controller = resumeController(resumeRepository);
 
-module.exports = router;
+    router
+        .get('/', [authValidation.verifyToken], controller.index)
+        .post('/', [
+            authValidation.verifyToken,
+            resumeValidation.validateResume
+        ], controller.create)
+        .get('/:resumeId', authValidation.verifyToken, controller.get)
+        .put('/:resumeId', [
+            authValidation.verifyToken,
+            resumeValidation.validateResume
+        ], controller.update)
+        .delete('/:resumeId', [authValidation.verifyToken], controller.delete);
+
+    return router;
+};
+
+module.exports = resumeRoutes;

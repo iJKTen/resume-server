@@ -3,9 +3,16 @@
 
 const router = require('express').Router();
 const { authController, authValidation } = require('../api/auth');
+const { userRepository } = require('../api/users');
 
-router
-    .post('/login', authValidation.validateLoginSchema, authController.login)
-    .post('/logout', authController.logout);
+const authRoutes = () => {
+    const controller = authController(userRepository);
 
-module.exports = router;
+    router
+        .post('/login', authValidation.validateLoginSchema, controller.login)
+        .post('/logout', controller.logout);
+
+    return router;
+};
+
+module.exports = authRoutes;
