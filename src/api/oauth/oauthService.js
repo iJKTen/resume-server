@@ -1,8 +1,8 @@
 'use strict';
-const userModel = require('./user');
+const oauthRepository = require('./oauthRepository');
 
 const create = async (newUser) => {
-    const user = await userModel.create(newUser);
+    const user = await oauthRepository.create(newUser);
 
     return {
         _id: user._id.toString(),
@@ -11,7 +11,7 @@ const create = async (newUser) => {
 };
 
 const get = async (id) => {
-    const user = await userModel.getByOAuthId(id);
+    const user = await oauthRepository.getByOAuthId(id);
     if (user) {
         return user;
     }

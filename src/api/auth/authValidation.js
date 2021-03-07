@@ -46,7 +46,7 @@ module.exports = {
     verifyToken: async (req, res, next) => {
         const token = req.headers['x-access-token'];
         if (!token) {
-            return res.respond.withError('Token not found', StatusCodes.BAD_REQUEST, null);
+            return res.respond.withError('Token not found', StatusCodes.UNAUTHORIZED, null);
         }
 
         try {

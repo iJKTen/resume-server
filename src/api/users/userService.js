@@ -1,9 +1,9 @@
 'use strict';
 
 const { StatusCodes } = require('http-status-codes');
-const { config } = require('../../config');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
+const { config } = require('../../config');
 const { eventEmitter, ...email } = require('../../services');
 const { HttpError } = require('../../utils');
 
@@ -54,6 +54,20 @@ module.exports = (repository) => {
             });
             throw err;
         },
+        getByEmail: async (email) => {
+            const user = await repository.getByEmail(email);
+            if (user) {
+                return user;
+            }
+
+            const err = new HttpError({
+                name: 'User not found!',
+                msg: `User not found`,
+                statusCode: StatusCodes.NOT_FOUND,
+                data: null
+            });
+            throw err;
+        },
         isAvailable: async (obj) => {
             const user = await repository.getByEmail(obj.email.toLowerCase());
             if (user) {
@@ -79,6 +93,17 @@ module.exports = (repository) => {
             const tokenExp = new Date(now.getTime() + (expirationInMinutes * 60000));
 
             const userObj = await repository.forgotPassword(user.email, token, digest, tokenExp);
+
+            if (!userObj) {
+                const err = new HttpError({
+                    name: 'User not found!',
+                    msg: `User not found`,
+                    statusCode: StatusCodes.NOT_FOUND,
+                    data: null
+                });
+                throw err;
+            }
+
             const data = {
                 email: user.email,
                 link: `${config.origin}/resetpassword/${userObj.value._id}/${token}`
@@ -88,6 +113,16 @@ module.exports = (repository) => {
         },
         resetPassword: async (userId, token, user) => {
             const existingUser = await repository.getById(userId);
+            if (!existingUser) {
+                const err = new HttpError({
+                    name: 'User not found!',
+                    msg: `User not found`,
+                    statusCode: StatusCodes.NOT_FOUND,
+                    data: null
+                });
+                throw err;
+            }
+
             const passwordIsAMatch = await bcrypt.compare(token, existingUser.resetPwdDigest);
 
             if (!passwordIsAMatch) {

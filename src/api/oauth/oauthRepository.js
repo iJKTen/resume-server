@@ -1,7 +1,7 @@
 /* eslint-disable new-cap */
 'use strict';
 
-const { dbClient } = require('../../config/');
+const { dbClient } = require('../../config');
 
 const userCollection = 'oauth_users';
 
